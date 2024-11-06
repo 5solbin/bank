@@ -23,7 +23,11 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
     private Account withdrawAccount;
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
     private Account depositAccount;
 
     private Long amount;
