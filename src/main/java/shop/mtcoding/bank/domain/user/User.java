@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor // 스프링이 User 객체를 생성할 때 빈 생성자로 new를 하기 떄문
 @Getter
-@EntityListeners(AuditingEntityListener.class) // createAt 이 작동을 하게 된스
+@EntityListeners(AuditingEntityListener.class) // createAt 이 작동을 하게 된다
 @Entity
 @Table(name = "user_tb")
 public class User { // extends (BaseTimeEntity) 시간설정(상속) >> Junit 테스트시에 불편한 점이 발생
