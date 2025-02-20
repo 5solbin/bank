@@ -14,7 +14,6 @@ import shop.mtcoding.bank.handler.ex.CustomValidationException;
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
-
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @ExceptionHandler(CustomApiException.class)

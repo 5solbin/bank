@@ -21,8 +21,8 @@ public class LoginUser implements UserDetails {
         authorities.add(() -> "ROLE_" + user.getRole());
         return authorities;
     }
-    @Override
 
+    @Override
     public String getPassword() {
         return user.getPassword();
     }

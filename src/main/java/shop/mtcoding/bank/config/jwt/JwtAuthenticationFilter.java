@@ -11,9 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import shop.mtcoding.bank.config.auth.LoginUser;
-import shop.mtcoding.bank.dto.user.UserReqDto;
 import shop.mtcoding.bank.dto.user.UserReqDto.LoginReqDto;
-import shop.mtcoding.bank.dto.user.UserRespDto;
 import shop.mtcoding.bank.dto.user.UserRespDto.LoginResDto;
 import shop.mtcoding.bank.uti.CustomResponseUtil;
 
@@ -38,6 +36,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         log.debug("디버그 : attemptAuthentication 호출됨");
             try {
+
                 ObjectMapper om = new ObjectMapper();
                 LoginReqDto loginReqDto = om.readValue(request.getInputStream(), LoginReqDto.class);
 
@@ -51,6 +50,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 // 이세션의 유효기간은 request하고, response하면 끝!!
                 Authentication authentication = authenticationManager.authenticate(authenticationToken);
                 return authentication;
+
             } catch (Exception e) {
                 // unsuccessfulAuthentication 호출함
                 throw new InternalAuthenticationServiceException(e.getMessage());

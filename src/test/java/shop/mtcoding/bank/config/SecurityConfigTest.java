@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc // Mock(가짜) 환경에 MockMvc가 등록됨
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 class SecurityConfigTest {
 

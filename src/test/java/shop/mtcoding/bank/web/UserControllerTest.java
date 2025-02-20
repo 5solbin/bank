@@ -7,10 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.bank.config.dummy.DummyObject;
 import shop.mtcoding.bank.domain.user.User;
 import shop.mtcoding.bank.domain.user.UserRepository;
@@ -24,6 +27,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static shop.mtcoding.bank.config.dummy.DummyObject.*;
 
+//@Transactional
+@ActiveProfiles("test")
+@Sql("classpath:db/teardown.sql")
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 class UserControllerTest extends DummyObject{
@@ -39,7 +45,7 @@ class UserControllerTest extends DummyObject{
 
     @BeforeEach
     public void setup() {
-        dataSetting();
+        userRepository.save(newUser("ssar", "쌀"));
         em.clear();
     }
 
@@ -87,7 +93,5 @@ class UserControllerTest extends DummyObject{
         resultActions.andExpect(status().isBadRequest());
     }
 
-    private void dataSetting() {
-        userRepository.save(newUser("ssar", "쌀"));
-    }
+
 }

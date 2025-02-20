@@ -1,19 +1,13 @@
 package shop.mtcoding.bank.service;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.bank.domain.user.User;
-import shop.mtcoding.bank.domain.user.UserEnum;
 import shop.mtcoding.bank.domain.user.UserRepository;
-import shop.mtcoding.bank.dto.user.UserReqDto;
-import shop.mtcoding.bank.dto.user.UserRespDto;
 import shop.mtcoding.bank.handler.ex.CustomApiException;
 
 import java.util.Optional;

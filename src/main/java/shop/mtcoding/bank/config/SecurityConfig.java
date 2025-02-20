@@ -31,7 +31,7 @@ public class SecurityConfig {
 
     @Bean //IOC 컨테이너에 BCryptPasswordEncoder 객체가 등록 됨
     public BCryptPasswordEncoder passwordEncoder() {
-        log.debug("디버그 : BCryptPasswordEncoder 로그 등록 됨");
+        log.debug("디버그 : BCryptPasswordEncoder 빈 등록 됨");
         return new BCryptPasswordEncoder();
     }
 

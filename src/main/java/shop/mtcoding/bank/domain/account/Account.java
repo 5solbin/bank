@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import shop.mtcoding.bank.domain.user.User;
+import shop.mtcoding.bank.handler.ex.CustomApiException;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -21,9 +22,9 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, nullable = false, length = 20)
-    private Long number; // 계좌 번호
     @Column(unique = true, nullable = false, length = 4)
+    private Long number; // 계좌 번호
+    @Column(nullable = false, length = 4)
     private Long password; // 계좌 비번
     @Column(nullable = false)
     private Long balance; // 잔액 (기본값 1000원)
@@ -49,5 +50,17 @@ public class Account {
         this.user = user;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public void checkOwner(Long userId) {
+//        String testUsername = user.getUsername();
+//        System.out.println("테스트 : " + testUsername);
+        if (user.getId() != userId) { // Lazy 로딩이어도 id를 조회할 떄는 select 쿼리가 날라가지 않는다.
+            throw new CustomApiException("계좌 소유자가 아닙니다.");
+        }
+    }
+
+    public void deposit(Long amount) {
+        balance = balance + amount;
     }
 }
