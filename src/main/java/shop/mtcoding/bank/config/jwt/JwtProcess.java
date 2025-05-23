@@ -25,7 +25,7 @@ public class JwtProcess {
         return JwtVo.TOKEN_PREFIX + jwtToken;
     }
 
-    // 토큰 검정 (return 되는 LoginUser 객체를 강제로 시큐리티 세션에 직접 주입할 예정)
+    // 토큰 검증 (return 되는 LoginUser 객체를 강제로 시큐리티 세션에 직접 주입할 예정)
     public static LoginUser verify(String token) {
         DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(JwtVo.SECRET)).build().verify(token);
         Long id = decodedJWT.getClaim("id").asLong();

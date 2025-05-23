@@ -43,7 +43,6 @@ public class UserController {
 
         JoinRespDto joinRespDto = userService.회원가입(joinReqDto);
         return new ResponseEntity<>(new ResponseDto<>(1, "회원가입 성공", joinRespDto), HttpStatus.CREATED);
-
         //RequestBody , valid
     }
 }

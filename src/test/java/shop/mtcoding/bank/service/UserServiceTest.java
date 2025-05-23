@@ -26,10 +26,10 @@ class UserServiceTest extends DummyObject {
     @InjectMocks // 가짜 환경 @Autowired x
     private UserService userService;
 
-    @Mock // 가짜 환경 조성
+    @Mock // 가짜 환경 조성 (가짜를 넣고 싶을 때)
     private UserRepository userRepository;
 
-    @Spy // 진짜를 가짜로 집어넣는다
+    @Spy // 진짜를 가짜로 집어넣는다 (진짜를 넣고 싶을때)
     private BCryptPasswordEncoder passwordEncoder;
 
     @Test
@@ -41,7 +41,7 @@ class UserServiceTest extends DummyObject {
         joinReqDto.setEmail("ssal@nate.com");
         joinReqDto.setFullname("쌀");
 
-        // stub1
+        // stub1 -> 가설 같은거 (이런게 실행되면 이렇게 된다)
         when(userRepository.findByUsername(any())).thenReturn(Optional.empty());
 
         // stub 2

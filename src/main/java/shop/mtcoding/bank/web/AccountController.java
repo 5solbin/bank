@@ -52,9 +52,11 @@ public class AccountController {
     }
 
     @PostMapping("/account/deposit")
-    public ResponseEntity<?> depositAccount(@RequestBody @Valid AccountService.AccountDepositReqDto accountDepositReqDto
+    public ResponseEntity<?> depositAccount(@RequestBody @Valid AccountDepositReqDto accountDepositReqDto
     ,BindingResult bindingResult) {
-        AccountService.AccountDepositResDto accountDepositResDto = accountService.계좌입금(accountDepositReqDto);
+        AccountRespDto.AccountDepositResDto accountDepositResDto = accountService.계좌입금(accountDepositReqDto);
         return new ResponseEntity<>(new ResponseDto<>(1, "계좌입금 완료", accountDepositResDto), HttpStatus.CREATED);
     }
+
+
 }

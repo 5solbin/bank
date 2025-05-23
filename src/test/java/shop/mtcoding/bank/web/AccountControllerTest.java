@@ -62,7 +62,7 @@ class AccountControllerTest extends DummyObject {
     }
 
     // jwt token -> 인증필터 -> 시큐리티 세션생성
-    // setupBefore=TEST_METHOD (메서드 실행전에 수행)
+    // setupBefore=TEST_METHOD (setup 메서드 실행전에 수행)
     // setBefore=TEST_EXCUTION (saveAccount_test 메서드 실행 전에 수행)
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION) // 디비에서 username=ssar 조회를 해서 세션에 담아주는 어노테이션!!
     @Test
@@ -106,8 +106,6 @@ class AccountControllerTest extends DummyObject {
         assertThrows(CustomApiException.class, () -> accountRepository.findByNumber(number).orElseThrow(
                 () -> new CustomApiException("계좌를 찾을 수 없습니다.")
         ));
-
-
     }
 
 

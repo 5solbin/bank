@@ -31,7 +31,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.authenticationManager = authenticationManager;
     }
 
-    // Post : /login
+    // Post : /login 일 때 동작
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         log.debug("디버그 : attemptAuthentication 호출됨");
@@ -45,14 +45,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                         loginReqDto.getUsername(), loginReqDto.getPassword()
                 );
 
-                // UserDetailService 의 loadUserByUsername 호출
+                // UserDetailsService 의 loadUserByUsername 호출
                 // Jwt를 쓴다고 하더라도, 컨트롤러에 진입을 하게 되면 시큐리티의 권한 체크, 인증체크의 도움을 받을 수 있게 세션을 만든다.
                 // 이세션의 유효기간은 request하고, response하면 끝!!
                 Authentication authentication = authenticationManager.authenticate(authenticationToken);
                 return authentication;
 
             } catch (Exception e) {
-                // unsuccessfulAuthentication 호출함
+                //  unsuccessfulAuthentication 호출. -> filter를 진행중아라 contoller 단에서 실행하는 CustomException은 호출 안된다.
                 throw new InternalAuthenticationServiceException(e.getMessage());
             }
     }
@@ -75,6 +75,5 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         LoginResDto loginResDto = new LoginResDto(loginUser.getUser());
         CustomResponseUtil.success(response,loginResDto);
-
     }
 }

@@ -30,7 +30,7 @@ import static shop.mtcoding.bank.config.dummy.DummyObject.*;
 //@Transactional
 @ActiveProfiles("test")
 @Sql("classpath:db/teardown.sql")
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc // Mokito 테스트는 단위 테스트에 가깝고, MockMvc 테스트는 통합 테스트에 가깝다.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 class UserControllerTest extends DummyObject{
 

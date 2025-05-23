@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import shop.mtcoding.bank.config.dummy.DummyObject;
 import shop.mtcoding.bank.domain.account.Account;
 import shop.mtcoding.bank.domain.account.AccountRepository;
@@ -15,7 +14,11 @@ import shop.mtcoding.bank.domain.transaction.Transaction;
 import shop.mtcoding.bank.domain.transaction.TransactionRepository;
 import shop.mtcoding.bank.domain.user.User;
 import shop.mtcoding.bank.domain.user.UserRepository;
+import shop.mtcoding.bank.dto.account.AccountReqDto;
+import shop.mtcoding.bank.dto.account.AccountReqDto.AccountDepositReqDto;
 import shop.mtcoding.bank.dto.account.AccountReqDto.AccountSaveReqDto;
+import shop.mtcoding.bank.dto.account.AccountRespDto;
+import shop.mtcoding.bank.dto.account.AccountRespDto.AccountDepositResDto;
 import shop.mtcoding.bank.dto.account.AccountRespDto.AccountSaveResDto;
 import shop.mtcoding.bank.handler.ex.CustomApiException;
 
@@ -110,7 +113,7 @@ class AccountServiceTest extends DummyObject {
         //stub2 (스텁이 진행될 때 마다 연관관된 객체는 새로 만들어서 주입하기 - 타이밍 때문에 꼬인다.)
         Account ssarAccount2 = newMockAccount(1L,1111L,1000L,ssar);
         Transaction transaction = newMockDepositTransaction(1L, ssarAccount2);
-        when(transactionRepository.save(any())).thenReturn(transaction); // service가 실행돼야 실행댐
+        when(transactionRepository.save(any())).thenReturn(transaction); // service가 실행돼야 실행댐 >>  중복의 가능성이 있으므로  스텁마다 다른 객체를 생성해 준ㄷㅏ.
 
         //when
         AccountDepositResDto accountDepositResDto = accountService.계좌입금(accountDepositReqDto);
@@ -156,7 +159,7 @@ class AccountServiceTest extends DummyObject {
     //  진짜 서비스를 테스트하고 싶으면, 내가 지금 무엇을 여기서 테스트해야할지 명확히 구분(책임 분리)
     // DTO를 만드는 책임 -> 서비스에 있지만
     // DB 관련된 것도 -> 서비스의 것이 아님
-    // DB 관련된 것을 조회했을 떄, 그 값을 통해서 어떤 비즈니스 로직이 흘러가는 것이 있으면 -> stub으로 정의해서 테스트 해보먄 된다.
+    // DB 관련된 것을 조회했을 떄, 그 값을 통해서 어떤 비즈니스 로직이 흘러가는 것이 있으면 -> stub으로 정의해서 테스트 해보면 된다.
     @Test
     public void 계좌입금_test3() throws Exception{
         //given
