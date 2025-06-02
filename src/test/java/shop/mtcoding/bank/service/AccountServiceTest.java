@@ -17,7 +17,7 @@ import shop.mtcoding.bank.domain.user.UserRepository;
 import shop.mtcoding.bank.dto.account.AccountReqDto;
 import shop.mtcoding.bank.dto.account.AccountReqDto.AccountDepositReqDto;
 import shop.mtcoding.bank.dto.account.AccountReqDto.AccountSaveReqDto;
-import shop.mtcoding.bank.dto.account.AccountRespDto;
+import shop.mtcoding.bank.dto.account.AccountReqDto.AccountTransferReqDto;
 import shop.mtcoding.bank.dto.account.AccountRespDto.AccountDepositResDto;
 import shop.mtcoding.bank.dto.account.AccountRespDto.AccountSaveResDto;
 import shop.mtcoding.bank.handler.ex.CustomApiException;
@@ -28,7 +28,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static shop.mtcoding.bank.service.AccountService.*;
 
 @ExtendWith(MockitoExtension.class)
 class AccountServiceTest extends DummyObject {
@@ -180,8 +179,83 @@ class AccountServiceTest extends DummyObject {
      */
 
     // 계좌 출금
+    @Test
+    public void 계좌출금_test() throws Exception{
+        //given
+        Long amount = 100L;
+        Long password = 1234L;
+        Long userId = 1L;
+
+        User ssar = newMockUser(1L,"ssar", "쌀");
+        Account ssarAccount = newMockAccount(1L, 1111L, 1000L, ssar);
+
+        //when
+        if (amount <= 0L){
+            throw new CustomApiException("0원 이하의 금액을 입금할 수 없습니다.");
+        }
+        ssarAccount.checkOwner(userId);
+        ssarAccount.checkSamePassword(password);
+//        ssarAccount.checkBalance(amount);
+        ssarAccount.withdraw(amount);
+
+        //then
+        assertThat(ssarAccount.getBalance()).isEqualTo(900L);
+
+    }
 
     // 계좌 이체
+    // 완벽한 테스트는 존재할 수 없습니다.
+    // 꼼꼼하게 값을 테스트해봐야 한다.
+    @Test
+    public void 계좌이체_test() throws Exception{
+        //given
+        Long userId = 1L;
+        AccountTransferReqDto accountTransferReqDto = new AccountTransferReqDto();
+        accountTransferReqDto.setWithdrawNumber(1111L);
+        accountTransferReqDto.setDepositNumber(2222L);
+        accountTransferReqDto.setWithdrawPassword(1234L);
+        accountTransferReqDto.setAmount(100L);
+        accountTransferReqDto.setGubun("TRANSFER");
+
+        User ssar = newMockUser(1L, "ssar", "쌀");
+        User cos = newMockUser(2L, "cos", "코스");
+
+        Account withdrawAccount = newMockAccount(1L, 1111L, 1000L,ssar);
+        Account depositAccount = newMockAccount(2L, 2222L, 1000L,cos);
+
+        //when
+
+        // 출금계좌와 입금계좌가 동일하면 안됨
+        if (accountTransferReqDto.getWithdrawNumber().longValue() == accountTransferReqDto.getDepositNumber().longValue()) {
+            throw new CustomApiException("동일한 계좌 번호로 입금할 수 없습니다.");
+        }
+
+
+        // 0원 체크 (validation 해도 댐)
+        if (accountTransferReqDto.getAmount() <= 0L) {
+            throw new CustomApiException("0원 이하의 금액을 입금할 수 없습니다.");
+        }
+
+
+        // 출금 소유자 확인(로그인한 사람과 동일한지)
+        withdrawAccount.checkOwner(userId);
+
+        // 출금 계좌 비밀번호 확인
+        withdrawAccount.checkSamePassword(accountTransferReqDto.getWithdrawPassword());
+
+        // 출금 계좌 잔액 확인
+        withdrawAccount.checkBalance(accountTransferReqDto.getAmount());
+
+        // 이체하기
+        withdrawAccount.withdraw(accountTransferReqDto.getAmount());
+        depositAccount.deposit(accountTransferReqDto.getAmount());
+
+
+
+        //then
+        assertThat(withdrawAccount.getBalance()).isEqualTo(900L);
+        assertThat(depositAccount.getBalance()).isEqualTo(1100L);
+    }
 
     // 계좌목록보기_유저별_테스트
 

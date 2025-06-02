@@ -54,8 +54,24 @@ public class AccountController {
     @PostMapping("/account/deposit")
     public ResponseEntity<?> depositAccount(@RequestBody @Valid AccountDepositReqDto accountDepositReqDto
     ,BindingResult bindingResult) {
-        AccountRespDto.AccountDepositResDto accountDepositResDto = accountService.계좌입금(accountDepositReqDto);
-        return new ResponseEntity<>(new ResponseDto<>(1, "계좌입금 완료", accountDepositResDto), HttpStatus.CREATED);
+        AccountDepositResDto accountDepositResDto = accountService.계좌입금(accountDepositReqDto);
+        return new ResponseEntity<>(new ResponseDto<>(1, "계좌 입금 완료", accountDepositResDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/s/account/withdraw")
+    public ResponseEntity<?> depositAccount(@RequestBody @Valid AccountWithdrawReqDto accountWithdrawReqDto
+            ,BindingResult bindingResult, @AuthenticationPrincipal LoginUser loginUser) {
+        AccountWithdrawResDto accountWithdrawResDto = accountService.계좌출금(accountWithdrawReqDto, loginUser.getUser().getId());
+
+        return new ResponseEntity<>(new ResponseDto<>(1, "계좌 출금 완료", accountWithdrawReqDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/s/account/transfer")
+    public ResponseEntity<?> transferAccount(@RequestBody @Valid AccountTransferReqDto accountTransferReqDto
+            ,BindingResult bindingResult, @AuthenticationPrincipal LoginUser loginUser) {
+        AccountTransferResDto accountTransferResDto = accountService.계좌이체(accountTransferReqDto, loginUser.getUser().getId());
+
+        return new ResponseEntity<>(new ResponseDto<>(1, "계좌 이체 완료", accountTransferReqDto), HttpStatus.CREATED);
     }
 
 

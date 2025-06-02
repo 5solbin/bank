@@ -108,6 +108,74 @@ class AccountControllerTest extends DummyObject {
         ));
     }
 
+    @Test
+    public void depositAccount_test() throws Exception{
+        //given
+        AccountDepositReqDto accountDepositReqDto = new AccountDepositReqDto();
+        accountDepositReqDto.setNumber(1111L);
+        accountDepositReqDto.setAmount(100L);
+        accountDepositReqDto.setGubun("DEPOSIT");
+        accountDepositReqDto.setTel("01088887777");
+
+        String requestBody = om.writeValueAsString(accountDepositReqDto);
+        System.out.println("테스트 : " + requestBody);
+
+        //when
+        ResultActions resultActions = mvc
+                .perform(post("/api/account/deposit").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        //then
+        resultActions.andExpect(status().isCreated());
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION) // 디비에서 username=ssar 조회를 해서 세션에 담아주는 어노테이션!!
+    @Test
+    public void withdrawAccount_test() throws Exception{
+        //given
+        AccountWithdrawReqDto accountWithdrawReqDto = new AccountWithdrawReqDto();
+        accountWithdrawReqDto.setNumber(1111L);
+        accountWithdrawReqDto.setPassword(1234L);
+        accountWithdrawReqDto.setAmount(100L);
+        accountWithdrawReqDto.setGubun("WITHDRAW");
+
+        String requestBody = om.writeValueAsString(accountWithdrawReqDto);
+        System.out.println("테스트 : " + requestBody);
+
+        //when
+        ResultActions resultActions = mvc
+                .perform(post("/api/s/account/withdraw").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        //then
+        resultActions.andExpect(status().isCreated());
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION) // 디비에서 username=ssar 조회를 해서 세션에 담아주는 어노테이션!!
+    @Test
+    public void transferAccount_test() throws Exception{
+        //given
+        AccountTransferReqDto accountTransferReqDto = new AccountTransferReqDto();
+        accountTransferReqDto.setWithdrawNumber(1111L);
+        accountTransferReqDto.setDepositNumber(2222L);
+        accountTransferReqDto.setWithdrawPassword(1234L);
+        accountTransferReqDto.setAmount(100L);
+        accountTransferReqDto.setGubun("TRANSFER");
+
+        String requestBody = om.writeValueAsString(accountTransferReqDto);
+        System.out.println("테스트 : " + requestBody);
+
+        //when
+        ResultActions resultActions = mvc
+                .perform(post("/api/s/account/transfer").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        //then
+        resultActions.andExpect(status().isCreated());
+    }
 
 
 }
