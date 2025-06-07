@@ -207,4 +207,20 @@ public class AccountService {
         return new AccountWithdrawResDto(withdrawAccountPS, transactionPS);
     }
 
+    public AccountDetailResDto 계좌상세보기(Long number, Long userId, Integer page) {
+        // 1. 구분값, 페이지 고정
+        String gubun = "ALL";
+
+        Account accountPS = accountRepository.findByNumber(number).orElseThrow(
+                () -> new CustomApiException("계좌를 찾을 수 없습니다.")
+        );
+
+        accountPS.checkOwner(userId);
+
+        List<Transaction> tranactionList = transactionRepository.findTransactionList(accountPS.getId(), gubun, page);
+        return new AccountDetailResDto(accountPS, tranactionList);
+
+    }
+
+
 }

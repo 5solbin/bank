@@ -1,6 +1,7 @@
 package shop.mtcoding.bank.web;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -72,6 +73,14 @@ public class AccountController {
         AccountTransferResDto accountTransferResDto = accountService.계좌이체(accountTransferReqDto, loginUser.getUser().getId());
 
         return new ResponseEntity<>(new ResponseDto<>(1, "계좌 이체 완료", accountTransferReqDto), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/s/account/{number}")
+    public ResponseEntity<?> findDetailAccount(@PathVariable Long number, @AuthenticationPrincipal LoginUser loginUser,
+                                               @RequestParam(value = "page", defaultValue = "0") Integer page) {
+
+        AccountDetailResDto accountDetailResDto = accountService.계좌상세보기(number, loginUser.getUser().getId(), page);
+        return new ResponseEntity<>(new ResponseDto<>(1, "계좌 상세보기 성공", accountDetailResDto), HttpStatus.OK);
     }
 
 

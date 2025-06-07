@@ -1,5 +1,6 @@
 package shop.mtcoding.bank.domain.transaction;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ class TransactionRepositoryImplTest extends DummyObject {
     public void setUp() {
         autoincrementReset();
         dataSetting();
+        em.clear(); // 레포테스트에서 필수
     }
 
     @Test
@@ -43,18 +45,20 @@ class TransactionRepositoryImplTest extends DummyObject {
 
         //when
         List<Transaction> transactionListPS = transactionRepository.findTransactionList(accountId, "ALL", 0);
-        transactionListPS.forEach((t) ->
-        {
+        transactionListPS.forEach((t) -> {
             System.out.println("id : "+ t.getId());
             System.out.println("amount : " + t.getAmount());
             System.out.println("sender : " + t.getSender());
             System.out.println("receiver : " + t.getReceiver());
             System.out.println("depositBalance : " + t.getDepositAccountBalance());
             System.out.println("withdrawBalance : " + t.getWithdrawAccountBalance());
+            System.out.println("fullname : " + t.getWithdrawAccount().getUser().getFullname());
             System.out.println("테스트 : =================");
         });
 
         //then
+        Assertions.assertThat(transactionListPS.get(3).getDepositAccountBalance()).isEqualTo(800L);
+
     }
     @Test
     public void dataJpa_test1() {
