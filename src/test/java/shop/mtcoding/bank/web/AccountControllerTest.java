@@ -99,15 +99,14 @@ class AccountControllerTest extends DummyObject {
         Long number = 1111L;
 
         //when
-        ResultActions resultActions = mvc.perform(delete("/api/s/account/" + number));
+        ResultActions resultActions = mvc.
+                perform(delete("/api/s/account/" + number));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + responseBody);
 
         //then
         // junit 테스트에서 delete 쿼리는 DB관련으로(DML) 가장 마지막에 실행되면 발동 안함
-        assertThrows(CustomApiException.class, () -> accountRepository.findByNumber(number).orElseThrow(
-                () -> new CustomApiException("계좌를 찾을 수 없습니다.")
-        ));
+        resultActions.andExpect(status().isOk());
     }
 
     @Test

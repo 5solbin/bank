@@ -138,7 +138,7 @@ class AccountServiceTest extends DummyObject {
         Account ssarAccount1 = newMockAccount(1L, 1111L, 1000L, ssar);
         when(accountRepository.findByNumber((any()))).thenReturn(Optional.of(ssarAccount1));
 
-        //stub2 - stub 끼리는 꼭 독립적으로 실행
+        //stub2 - stub 끼리는 꼭 독립적으로 실행 >> 이전의 stub 객체가 다음 테스트에 영향을 끼칠 수 있기 때문
         User ssar2 = newMockUser(1L, "ssar", "쌀");
         Account ssarAccount2 = newMockAccount(1L,1111L,1000L,ssar2);
         Transaction transaction = newMockDepositTransaction(1L, ssarAccount2);
